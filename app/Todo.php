@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class Todo extends Model
 {
+    protected $table = 'todo';
     /**
      * The attributes that are mass assignable.
      *
