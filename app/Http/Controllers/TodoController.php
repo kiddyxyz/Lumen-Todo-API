@@ -126,15 +126,15 @@ class TodoController extends Controller
      *     tags={"Todo"},
      *     summary="Add a new todo",
      *     description="",
-     *     @OA\Property(
-     *      property="title",
-     *      type="string",
-     *      description="The title"
-     *     ),
-     *     @OA\Property(
-     *      property="description",
-     *      type="string",
-     *      description="The description"
+     *     @OA\Parameter(
+     *      in="body",
+     *      name="body",
+     *      description="list of parameter needed",
+     *      required=true,
+     *      @OA\Schema(
+     *          @OA\Property(property="title", type="string"),
+     *          @OA\Property(property="description", type="string"),
+     *      )
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -159,10 +159,10 @@ class TodoController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *     path="/todo/{id}",
      *     tags={"Todo"},
-     *     summary="Add a new todo",
+     *     summary="Update a todo",
      *     description="",
      *     @OA\Parameter(
      *         description="ID of todo to return",
@@ -174,21 +174,17 @@ class TodoController extends Controller
      *           format="int64"
      *         )
      *     ),
-     *     @OA\Property(
-     *      property="title",
-     *      type="string",
-     *      description="The title"
-     *     ),
-     *     @OA\Property(
-     *      property="description",
-     *      type="string",
-     *      description="The description"
-     *     ),
-     *     @OA\Property(
-     *      property="status",
-     *      type="string",
-     *      description="The status of todo, Y or N"
-     *     ),
+     *     @OA\Parameter(
+     *     in="body",
+     *     name="body",
+     *     description="list of parameter needed",
+     *     required=true,
+     *     @OA\Schema(
+     *     @OA\Property(property="title", type="string"),
+     *     @OA\Property(property="description", type="string"),
+     *     @OA\Property(property="status", type="string"),
+     *     )
+     *   ),
      *     @OA\Response(
      *         response=200,
      *         description="Success",
