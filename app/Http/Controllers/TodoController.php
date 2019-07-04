@@ -207,7 +207,7 @@ class TodoController extends Controller
     public function update(Request $request, $id){
         $array = ["Y", "N"];
 
-        if(!in_array($array, $request->status)){
+        if(!in_array($request->status, $array)){
             return response()->json([
                 'code' => 400,
                 'message' => "Your status should be Y or N!",
