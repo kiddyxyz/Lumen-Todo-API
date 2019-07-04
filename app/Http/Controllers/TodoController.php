@@ -129,9 +129,12 @@ class TodoController extends Controller
      *     @OA\RequestBody(
      *      description="Body needed",
      *      required=true,
-     *      @OA\Schema(
-     *          @OA\Property(property="title", type="string"),
-     *          @OA\Property(property="description", type="string"),
+     *      @OA\MediaType(
+     *          mediaType="application/x-www-form-urlencoded",
+     *          @OA\Schema(
+     *              @OA\Property(property="title", type="string"),
+     *              @OA\Property(property="description", type="string"),
+     *          )
      *      )
      *     ),
      *     @OA\Response(
@@ -175,10 +178,13 @@ class TodoController extends Controller
      *     @OA\RequestBody(
      *     description="list of parameter needed",
      *     required=true,
-     *     @OA\Schema(
-     *      @OA\Property(property="title", type="string"),
-     *      @OA\Property(property="description", type="string"),
-     *      @OA\Property(property="status", type="string"),
+     *     @OA\MediaType(
+     *          mediaType="application/x-www-form-urlencoded",
+     *          @OA\Schema(
+     *              @OA\Property(property="title", type="string"),
+     *              @OA\Property(property="description", type="string"),
+     *              @OA\Property(property="status", type="string"),
+     *          )
      *     )
      *   ),
      *     @OA\Response(
