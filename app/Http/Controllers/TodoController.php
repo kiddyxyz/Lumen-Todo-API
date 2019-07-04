@@ -126,10 +126,8 @@ class TodoController extends Controller
      *     tags={"Todo"},
      *     summary="Add a new todo",
      *     description="",
-     *     @OA\Parameter(
-     *      in="body",
-     *      name="body",
-     *      description="list of parameter needed",
+     *     @OA\RequestBody(
+     *      description="Body needed",
      *      required=true,
      *      @OA\Schema(
      *          @OA\Property(property="title", type="string"),
@@ -174,15 +172,13 @@ class TodoController extends Controller
      *           format="int64"
      *         )
      *     ),
-     *     @OA\Parameter(
-     *     in="body",
-     *     name="body",
+     *     @OA\RequestBody(
      *     description="list of parameter needed",
      *     required=true,
      *     @OA\Schema(
-     *     @OA\Property(property="title", type="string"),
-     *     @OA\Property(property="description", type="string"),
-     *     @OA\Property(property="status", type="string"),
+     *      @OA\Property(property="title", type="string"),
+     *      @OA\Property(property="description", type="string"),
+     *      @OA\Property(property="status", type="string"),
      *     )
      *   ),
      *     @OA\Response(
