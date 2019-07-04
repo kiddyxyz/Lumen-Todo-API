@@ -13,24 +13,18 @@ class TodoController extends Controller
      *     @OA\Info(
      *         version="1.0.0",
      *         title="Swagger",
-     *         description="This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
-     *         termsOfService="http://swagger.io/terms/",
+     *         description="This is test server",
      *         @OA\Contact(
-     *             email="apiteam@swagger.io"
+     *             email="kiddydhana@gmail.com"
      *         ),
      *         @OA\License(
-     *             name="Apache 2.0",
-     *             url="http://www.apache.org/licenses/LICENSE-2.0.html"
+     *             name="GLU",
      *         )
      *     ),
      *     @OA\Server(
-     *         description="OpenApi host",
-     *         url="https://petstore.swagger.io/v3"
+     *         description="Todo Host",
+     *         url="https://apitodo.hudya.xyz"
      *     ),
-     *     @OA\ExternalDocumentation(
-     *         description="Find out more about Swagger",
-     *         url="http://swagger.io"
-     *     )
      * )
      */
 
@@ -54,6 +48,8 @@ class TodoController extends Controller
      *         description="successful operation",
      *     ),
      * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request){
         $todo = Todo::where('status', 'Y')->orderBy('id', 'desc')->take(10)->get();
@@ -61,18 +57,93 @@ class TodoController extends Controller
         return response()->json([
             'code' => 200,
             'values' => $todo
-        ]);
+        ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/todo/{id}",
+     *     summary="get Todo by Id",
+     *     description="Returns a single todo",
+     *     tags={"Todo"},
+     *     @OA\Parameter(
+     *         description="ID of todo to return",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="integer",
+     *           format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="return Todo single",
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Invalid ID"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Todo Not Found"
+     *     ),
+     *     security={
+     *       {"api_key": {}}
+     *     }
+     * )
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(Request $request, $id){
+        if(!$id){
+            return response()->json([
+                'code' => 400,
+                'message' => "Invalid ID!"
+            ], 400);
+        }
+
+
         $todo = Todo::where('id', $id)->first();
+
+        if(!$todo){
+            return response()->json([
+                'code' => 404,
+                'message' => "Todo Not Found!"
+            ], 404);
+        }
 
         return response()->json([
             'code' => 200,
             'values' => $todo
-        ]);
+        ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/todo",
+     *     tags={"Todo"},
+     *     summary="Add a new todo",
+     *     description="",
+     *     @OA\Property(
+     *      property="title",
+     *      type="string",
+     *      description="The title"
+     *     ),
+     *     @OA\Property(
+     *      property="description",
+     *      type="string",
+     *      description="The description"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     * )
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request){
 
         $todo = new Todo();
@@ -84,9 +155,57 @@ class TodoController extends Controller
             'code' => 200,
             'message' => "Successfully create todo!",
             'values' => $todo
-        ]);
+        ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/todo/{id}",
+     *     tags={"Todo"},
+     *     summary="Add a new todo",
+     *     description="",
+     *     @OA\Parameter(
+     *         description="ID of todo to return",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="integer",
+     *           format="int64"
+     *         )
+     *     ),
+     *     @OA\Property(
+     *      property="title",
+     *      type="string",
+     *      description="The title"
+     *     ),
+     *     @OA\Property(
+     *      property="description",
+     *      type="string",
+     *      description="The description"
+     *     ),
+     *     @OA\Property(
+     *      property="status",
+     *      type="string",
+     *      description="The status of todo, Y or N"
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Status should be Y or N",
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Id Not Found",
+     *     ),
+     * )
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id){
         $array = ["Y", "N"];
 
@@ -94,10 +213,18 @@ class TodoController extends Controller
             return response()->json([
                 'code' => 400,
                 'message' => "Your status should be Y or N!",
-            ]);
+            ], 400);
         }
 
         $todo = Todo::where('id', $id)->first();
+
+        if(!$todo){
+            return response()->json([
+                'code' => 404,
+                'message' => "Todo Not Found!",
+            ], 404);
+        }
+
         $todo->title = $request->title;
         $todo->description = $request->description;
         $todo->status = $request->status;
@@ -107,6 +234,6 @@ class TodoController extends Controller
             'code' => 200,
             'message' => "Successfully update todo!",
             'values' => $todo
-        ]);
+        ], 200);
     }
 }
